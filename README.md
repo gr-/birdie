@@ -6,7 +6,7 @@ The micro-blogging app for educational purpose.
 The actual implementation is powered by the *Pyramid* web development framework for Python 3.
 Ingredients of the soup are the *Chameleon* template framework, *SQLAlchemy* ORM, *Twitter-bootstrap* for CSS.
 
-Fragments of the actual source code (especially the model) comes from a previous [**Birdie** implementation](https://github.com/cguardia/Pyramid-Tutorial/tree/master/src/stage3) of [cguardia–(https://github.com/cguardia/).
+Fragments of the actual source code (especially the model) comes from a previous [**Birdie** implementation](https://github.com/cguardia/Pyramid-Tutorial/tree/master/src/stage3) of [Carlos de la Guardia](https://github.com/cguardia/).
 
 **Birdie** is distributed under the permissive MIT license (see `LICENSE` text for details).
 
@@ -97,21 +97,32 @@ the documentation on the [official pip website](http://www.pip-installer.org/en/
 
 Install procedure is fairly easy. You have to decide for development or (limited) production instance and follow the directions below.
 
-#### Production instance
+#### Development mode
+
+Install dependencies in the site-package directory of the sandbox, and basically deploy the package of the app itself in a way that it can still be edited directly from its source checkout:
 
     $ python setup.py develop
+
+Then you have to initialize the database (sqlite backend) creating the required schema for the app model: 
+
 	$ initialize_birdie_db development.ini
+
+Ultimately, the *waitress* web server is invoked with all the settings in the *wsgi* server configuration section of the `development.ini` file, to serve the web pages of the **Birdie** app:  
+
     $ pserve development.ini --reload
 
+The `--reload` option allows to update the source code and immediatly (by refreshing the web page) observe the modifications on the running instance.
 
-#### Development instance
+#### Production mode
+
+It roughly works the same way than the development mode (see above).
 
     $ python setup.py install
 	$ initialize_birdie_db production.ini
     $ pserve production.ini
 
 
-Whatever your decision, the instance of the **Birdie** web app is located at [http://localhost:6543](http://localhost:6543)
+Whatever your decision, an instance of the **Birdie** web app is located at [http://localhost:6543](http://localhost:6543)
 
 Enjoy!
 
@@ -119,8 +130,8 @@ Enjoy!
 
 There are (at least) two known issues you may face when running the **Birdie** app.
  
- - (1) port 6543 is assigned to another app: kill the app or change the port in the `production.ini` and/or `development.ini` file;
- - (2) there is a residual cookie from a previous Birdie installation: delete it within your web browser.  
+ 1. port 6543 is assigned to another app: kill the app or change the port in the `production.ini` and/or `development.ini` file;
+ 2. there is a residual cookie from a previous Birdie installation: delete it within your web browser.  
 
 
 [ez]:   https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py "ez_setup.py"
