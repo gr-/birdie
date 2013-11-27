@@ -1,0 +1,24 @@
+<div metal:use-macro="view.layout">
+   	<div metal:fill-slot="content-top" tal:omit-tag="">
+        <h1>About Birdie</h1>
+		<p><em>Python 3</em>, <em>Pyramid</em> and <em>Twitter Bootstrap</em> are the main ingredients of the soup. This flavor is powered by a standard SQL backend. </p>
+		<p><i>Give an appropriate description of the app with all the required material to make up reader's mind and to install and run the app.</i></p>
+		
+
+	</div>
+
+  	<div metal:fill-slot="content-bottom">
+		<h2>README</h2>
+		bla bla bla
+
+		<hr />
+		<h2>INSTALL</h2>
+		bla bla bla
+
+		<code>
+		pyvenv env
+		</code>
+
+		bla bla bla
+	</div>
+</div>
