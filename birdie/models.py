@@ -6,6 +6,7 @@ from sqlalchemy import (
     Unicode,
     ForeignKey,
     UniqueConstraint,
+    TIMESTAMP,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -22,6 +23,8 @@ DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
 
+from .security import Crypt
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -33,7 +36,7 @@ class User(Base):
 
     def __init__(self, username, password, fullname, about, dor):
         self.username = username
-        self.password = crypt.encode(password)
+        self.password = Crypt.encode(password)
         self.fullname = fullname
         self.about = about
         self.dor = dor

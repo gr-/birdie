@@ -25,8 +25,9 @@ from .models import (
     Chirp,
     User,
     Follower,
-    check_login,
     )
+
+from .security import check_login
 
 
 conn_err_msg = """\
@@ -68,6 +69,7 @@ class BirdieViews(object):
         user = None
         follows = None
         chirps = None
+        latest_users = None
         friends = []
         try:
             if username:        
@@ -75,13 +77,15 @@ class BirdieViews(object):
                 follows = DBSession.query(Follower).filter(Follower.follower==user.id)
                 friends = [friend.id for friend in follows]
             chirps = DBSession.query(Chirp).order_by(Chirp.timestamp.desc()).limit(15)
+            latest_users = DBSession.query(User).order_by(User.dor.desc()).limit(5)
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
         
         return {'elapsed': get_elapsed,
             'user': user,
             'follows': friends,
-            'chirps': chirps}
+            'chirps': chirps,
+            'latest_users': latest_users}
 
     @view_config(route_name='mybirdie',
                 permission='registered',
@@ -271,13 +275,4 @@ class BirdieViews(object):
         
         DBSession.query(Follower).filter(Follower.follower==follower).filter(Follower.follows==follows).delete()
         return HTTPFound(location = self.request.referer)
-
-
-
-    try:
-        one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
-    except DBAPIError:
-        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-    return {'one': one, 'project': 'birdie'}
-
 

@@ -1,10 +1,7 @@
 from pyramid.security import Authenticated
 from pyramid.security import Allow
 
-from .models import (
-    DBSession,
-    User,
-    )
+import birdie.models
     
 from cryptacular.bcrypt import BCRYPTPasswordManager
 
@@ -20,8 +17,8 @@ class RootFactory(object):
         
 
 def check_login(login, password):
-    session = DBSession()
-    user = session.query(User).filter_by(username=login).first()
+    session = birdie.models.DBSession()
+    user = session.query(birdie.models.User).filter_by(username=login).first()
     if user is not None:
         hashed_password = user.password
         if Crypt.check( hashed_password, password ):

@@ -35,24 +35,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="${view.app_url}/about">Birdie</a>
+          <a class="navbar-brand" href="${view.app_url}/about"><span class="glyphicon glyphicon-share-alt"></span>Birdie</a>
         </div>
         <div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li>
-					<a href="${view.app_url}">Home</a>
+					<a href="${view.app_url}"><span class="glyphicon glyphicon-home"></span> Home</a>
 				</li>
 				<li>
 					<a tal:condition="view.logged_in is not None"
-						href="${view.app_url}/${view.logged_in}">My Birdie</a>
+						href="${view.app_url}/${view.logged_in}"><span class="glyphicon glyphicon-user"></span> My Birdie</a>
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 	 			<li tal:condition="view.logged_in is not None">
-					<a href="${view.app_url}/logout">Logout (${view.logged_in})</a>
+					<a href="${view.app_url}/logout"><span class="glyphicon glyphicon-log-out"></span> Logout (${view.logged_in})</a>
 				</li>
 				<li tal:condition="view.logged_in is None">
-					<a href="${view.app_url}/login">Sign In</a>
+					<a href="${view.app_url}/login"><span class="glyphicon glyphicon-log-in"></span> Sign In</a>
 				</li>				
 			</ul>        
         </div><!--/.navbar-collapse -->
