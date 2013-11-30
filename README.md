@@ -3,10 +3,10 @@ Birdie
 
 The micro-blogging app for educational purpose.
 
-The actual implementation is powered by the *Pyramid* web development framework for Python 3.
+The current implementation is powered by the *Pyramid* web development framework for Python 3.
 Ingredients of the soup are the *Chameleon* template framework, *SQLAlchemy* ORM, *Twitter-bootstrap* for CSS.
 
-Fragments of the actual source code (especially the model) comes from a previous [**Birdie** implementation](https://github.com/cguardia/Pyramid-Tutorial/tree/master/src/stage3) of [Carlos de la Guardia](https://github.com/cguardia/).
+Fragments of the source code comes from a previous [**Birdie** implementation](https://github.com/cguardia/Pyramid-Tutorial/tree/master/src/stage3) of [Carlos de la Guardia](https://github.com/cguardia/). Actually, it essentially remains the original idea and terms (**Birdie** and *chirp*) in the project.
 
 **Birdie** is distributed under the permissive MIT license (see `LICENSE` text for details).
 
