@@ -10,8 +10,8 @@
 					<div class="col-lg-12">
 						<h3>Follows:</h3>
 					</div>
-			    	<div class="col-lg-4" tal:condition="follows.count()>0">
-			        	<div class="bs-example" tal:repeat="friend follows">
+			    	<div class="col-lg-4" tal:condition="user.friends.count()>0">
+			        	<div class="bs-example" tal:repeat="friend user.friends">
 			            	<div class="list-group">
 			        			<a href="${view.app_url}/${friend.username}/view" class="list-group-item">
 			                    	<p class="list-group-item-text">${friend.fullname} <small>@${friend.username} </small></p>
@@ -19,14 +19,14 @@
 			             	</div>
 			          	</div>				
 			   		</div>
-			   		<span tal:condition="follows.count()==0" tal:omit-tag="">you should think about having more friends!</span>
+			   		<span tal:condition="user.friends.count()==0" tal:omit-tag="">you should think about having more friends!</span>
 				</div>
 				<div class="row">
 					<div class="col-lg-12">
 						<h3>Followers:</h3>
 					</div>
-			    	<div class="col-lg-4" tal:condition="followers.count()>0">
-			        	<div class="bs-example" tal:repeat="follower followers">
+			    	<div class="col-lg-4" tal:condition="user.followers.count()>0">
+			        	<div class="bs-example" tal:repeat="follower user.followers">
 			            	<div class="list-group">
 			        			<a href="${view.app_url}/${follower.username}/view" class="list-group-item">
 			                    	<p class="list-group-item-text">${follower.fullname} <small>@${follower.username} </small></p>
@@ -34,7 +34,7 @@
 			             	</div>
 			          	</div>				
 			   		</div>
-			   		<span tal:condition="followers.count()==0" tal:omit-tag="">not as popular as expected?!</span>
+			   		<span tal:condition="user.followers.count()==0" tal:omit-tag="">not as popular as expected?!</span>
 				</div>				
 			</div>
 			<div class="col-md-6">
