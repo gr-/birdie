@@ -24,10 +24,13 @@ from .models import (
     DBSession,
     Chirp,
     User,
-    Follower,
+#    Follower,
     )
 
 from .security import check_login
+
+from operator import attrgetter # to sort collections of complex objects by named attributes
+from functools import reduce
 
 
 conn_err_msg = """\
@@ -46,6 +49,11 @@ After you fix the problem, please restart the Pyramid application to
 try it again.
 """
 
+MAX_CHIRPS = 15
+MAX_MY_CHIRPS = 5
+MAX_USERS = 5
+MAX_FRIENDS = 0
+MAX_FOLLOWERS = 0
 
 class BirdieViews(object):
     def __init__(self, request):
@@ -53,7 +61,6 @@ class BirdieViews(object):
         renderer = get_renderer("templates/layout-bootstrap.pt")
         self.layout = renderer.implementation().macros['layout']
         self.logged_in = authenticated_userid(request)
-        self.username = request.params.get('username')
         self.app_url = request.application_url
         self.static_url = request.static_url
 
@@ -67,35 +74,33 @@ class BirdieViews(object):
     def birdie_view(self):
         username = self.logged_in
         user = None
-        follows = None
-        chirps = None
-        latest_users = None
-        friends = []
+        chirps = []
+        latest_users = []
         try:
             if username:        
                 user = DBSession.query(User).filter_by(username=username).one()
-                follows = DBSession.query(Follower).filter(Follower.follower==user.id)
-                friends = [friend.id for friend in follows]
-            chirps = DBSession.query(Chirp).order_by(Chirp.timestamp.desc()).limit(15)
-            latest_users = DBSession.query(User).order_by(User.dor.desc()).limit(5)
+            chirps = DBSession.query(Chirp).order_by(Chirp.timestamp.desc()).limit(MAX_CHIRPS)
+            latest_users = DBSession.query(User).order_by(User.dor.desc()).limit(MAX_USERS)
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
         
         return {'elapsed': get_elapsed,
             'user': user,
-            'follows': friends,
             'chirps': chirps,
             'latest_users': latest_users}
+
 
     @view_config(route_name='mybirdie',
                 permission='registered',
                 renderer='templates/mybirdie-bootstrap.pt')
     def my_birdie_view(self):
         username = self.logged_in
+        chirps = []
+        my_chirps = []
         
         user = DBSession.query(User).filter_by(username=username).one()
         
-        if 'form.submitted' in self.request.params:
+        if ('form.submitted' in self.request.params and self.request.params.get('chirp')):
             chirp = self.request.params.get('chirp')
             author = user
             timestamp = datetime.utcnow()
@@ -104,25 +109,20 @@ class BirdieViews(object):
             url = self.request.route_url('mybirdie', username=username)
             return HTTPFound(url)
 
-        follows = DBSession.query(User).join(Follower, User.id==Follower.follows).\
-                                        filter_by(follower=user.id)
-#       follows = follows.order_by(Follower.timestamp.asc()).limit(10)
-        followers = DBSession.query(User).join(Follower, User.id==Follower.follower).\
-                                       filter_by(follows=user.id)
-#       followers = followers.order_by(Follower.follower.asc()).limit(10)
-        chirpers = [friend.id for friend in follows] # projection of a user on column id
-        chirps = DBSession.query(Chirp).filter(Chirp.author_id.in_(chirpers))
-        chirps = chirps.order_by(Chirp.timestamp.desc()).limit(15)
-        
-        my_chirps = DBSession.query(Chirp).filter_by(author_id=user.id)
-        my_chirps = my_chirps.order_by(Chirp.timestamp.desc()).limit(6)
+#        chirps = reduce(lambda x, y: x.extend(y), [f.chirps for f in user.friends if f.chirps], [])
+        for f in user.friends:
+            if f.chirps:
+                chirps[len(chirps):] = f.chirps
+                
+        chirps.sort(key=attrgetter('timestamp'), reverse=True)
+
+        if user.chirps:
+            my_chirps = sorted(user.chirps, key=attrgetter('timestamp'), reverse=True)
 
         return {'elapsed': get_elapsed,
                 'user': user,
-                'follows': follows,
-                'followers': followers,
-                'chirps': chirps,
-                'my_chirps': my_chirps}
+                'chirps': chirps[:MAX_CHIRPS],
+                'my_chirps': my_chirps[:MAX_MY_CHIRPS]}
 
     @view_config(route_name='login',
                 renderer='templates/login-bootstrap.pt')
@@ -132,7 +132,6 @@ class BirdieViews(object):
         login_url = request.route_url('login')
         join_url = request.route_url('join')
         came_from = request.params.get('came_from')
-        print('came_from={!r}\n'.format(request.params.get('came_from')))
         if came_from is None : # first time it enters the login page
             came_from = request.referer
         message = ''
@@ -143,7 +142,7 @@ class BirdieViews(object):
             password = request.params['password']
             if check_login(login, password):
                 headers = remember(request, login)
-                if (came_from == login_url or came_from == join_url or came_from == self.app_url or came_from == ''):
+                if (came_from == login_url or came_from == join_url or came_from == self.app_url):
                     came_from = request.route_url('mybirdie', username=login)  # never use login form itself as came_from
                 return HTTPFound(location=came_from,
                                  headers=headers)
@@ -197,10 +196,10 @@ class BirdieViews(object):
 
             if message:
                 return {'message': message,
-                    'came_from': came_from,
-                    'username': username,
-                    'fullname': fullname,
-                    'about': about}
+                        'came_from': came_from,
+                        'username': username,
+                        'fullname': fullname,
+                        'about': about}
            
            # register new user
             dor = datetime.utcnow()
@@ -225,26 +224,21 @@ class BirdieViews(object):
     def profile_view(self):
         auth_username = self.logged_in
         username = self.request.matchdict['username']
-        if auth_username==username:
+        chirps = []
+        
+        if auth_username==username: # redirect to my_birdie page
             return HTTPFound(location = self.request.route_url('mybirdie', username=username))
 
         auth_user = DBSession.query(User).filter_by(username=auth_username).one()
-        auth_user_follows = DBSession.query(Follower).filter_by(follower=auth_user.id)
-        auth_user_friends = [friend.id for friend in auth_user_follows] # projection
         user = DBSession.query(User).filter_by(username=username).one()
         
-        follows = DBSession.query(Follower).filter_by(follower=user.id)
-#        follows = follows.order_by(Follower.follows.asc()).limit(10)
-        followers = DBSession.query(Follower).filter_by(follows=user.id)
-#        followers = followers.order_by(Follower.follower.asc()).limit(10)
-        chirps = DBSession.query(Chirp).filter_by(author_id=user.id)
-        chirps = chirps.order_by(Chirp.timestamp.desc()).limit(6)
+        if user.chirps:
+            chirps = sorted(user.chirps, key=attrgetter('timestamp'), reverse=True)
+        
         return {'elapsed': get_elapsed,
-                'auth_user_follows': auth_user_friends,
+                'auth_user' : auth_user,
                 'user': user,
-                'follows': follows,
-                'followers': followers,
-                'chirps': chirps}
+                'chirps': chirps[:MAX_CHIRPS]}
                 
 
     @view_config(route_name='follow',
@@ -255,10 +249,9 @@ class BirdieViews(object):
         user = DBSession.query(User).filter_by(username=username).one()
         friend_username = self.request.matchdict.get('username')
         friend = DBSession.query(User).filter_by(username=friend_username).one()
-        follower = user.id
-        follows = friend.id
         
-        DBSession.add( Follower(follower, follows ))
+        if (friend != user and friend not in user.friends):
+            user.friends.append(friend)
         return HTTPFound(location = self.request.referer)
 
 
@@ -270,9 +263,8 @@ class BirdieViews(object):
         user = DBSession.query(User).filter_by(username=username).one()
         friend_username = self.request.matchdict.get('username')
         friend = DBSession.query(User).filter_by(username=friend_username).one()
-        follower = user.id
-        follows = friend.id
         
-        DBSession.query(Follower).filter(Follower.follower==follower).filter(Follower.follows==follows).delete()
+        if friend in user.friends:
+            user.friends.remove(friend)
         return HTTPFound(location = self.request.referer)
 
