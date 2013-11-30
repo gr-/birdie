@@ -20,8 +20,8 @@
 						<a href="${view.app_url}/${chirp.author.username}/view">${chirp.author.fullname}</a>
 						<span class="text-muted">@${chirp.author.username}</span>
 						<div tal:condition="user is not None" tal:omit-tag="">
-							<a href="${view.app_url}/${chirp.author.username}/follow" role="button" class="btn btn-success btn-xs pull-right" tal:condition="chirp.author.id not in follows and chirp.author.id!=user.id">follow</a>
-							<a href="${view.app_url}/${chirp.author.username}/unfollow" role="button" class="btn btn-danger btn-xs pull-right" tal:condition="chirp.author.id in follows">unfollow</a>
+							<a href="${view.app_url}/${chirp.author.username}/follow" role="button" class="btn btn-success btn-xs pull-right" tal:condition="chirp.author not in user.friends and chirp.author!=user">follow</a>
+							<a href="${view.app_url}/${chirp.author.username}/unfollow" role="button" class="btn btn-danger btn-xs pull-right" tal:condition="chirp.author in user.friends">unfollow</a>
 						</div>
 					</div>
 					<div class="panel-body">
