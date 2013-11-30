@@ -2,11 +2,11 @@
 	<div metal:fill-slot="content-top" tal:omit-tag="">
 		<div class="row">
 			<div class="col-lg-4">		
-				<h2>${user.fullname} <small>@${user.username}</small><a href="${view.app_url}/${user.username}/follow" role="button" class="btn btn-success btn-md pull-right" tal:condition="user.id not in auth_user_follows">follow</a>
-				<a href="${view.app_url}/${user.username}/unfollow" role="button" class="btn btn-danger btn-md pull-right" tal:condition="user.id in auth_user_follows">unfollow</a></h2>
+				<h2>${user.fullname} <small>@${user.username}</small><a href="${view.app_url}/${user.username}/follow" role="button" class="btn btn-success btn-md pull-right" tal:condition="user not in auth_user.friends">follow</a>
+				<a href="${view.app_url}/${user.username}/unfollow" role="button" class="btn btn-danger btn-md pull-right" tal:condition="user in auth_user.friends">unfollow</a></h2>
 			   	<p><em>${user.about}</em></p>
-				<p><span class="badge">${follows.count()}</span> friends and 
-			    	<span class="badge">${followers.count()}</span> followers
+				<p><span class="badge">${user.friends.count()}</span> friends and 
+			    	<span class="badge">${user.followers.count()}</span> followers
 				</p>
 			</div>
 		</div>
