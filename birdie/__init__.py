@@ -26,6 +26,9 @@ def main(global_config, **settings):
                           authentication_policy=authc_policy,
                           authorization_policy=authz_policy,                          
                           settings=settings)
+    # for pyramid 1.5 branch compatibility
+    config.include('pyramid_chameleon')
+    
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('about', '/about')
