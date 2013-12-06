@@ -7,11 +7,12 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'pyramid',
-    'SQLAlchemy',
+    'pyramid>=1.4',
+    'pyramid_chameleon', # for compatibility with pyramid 1.5 branch
+    'SQLAlchemy>=0.8',
     'transaction',
     'pyramid_tm',
-    'pyramid_debugtoolbar',
+    'pyramid_debugtoolbar>=1.0.8',
     'zope.sqlalchemy',
     'waitress',
     'repoze.timeago',
