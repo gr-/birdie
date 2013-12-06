@@ -74,20 +74,22 @@ class BirdieViews(object):
     def birdie_view(self):
         username = self.logged_in
         user = None
-        chirps = []
-        latest_users = []
+        chirps, users = [], []
         try:
             if username:        
                 user = DBSession.query(User).filter_by(username=username).one()
-            chirps = DBSession.query(Chirp).order_by(Chirp.timestamp.desc()).limit(MAX_CHIRPS)
-            latest_users = DBSession.query(User).order_by(User.dor.desc()).limit(MAX_USERS)
+            chirps = DBSession.query(Chirp).order_by(Chirp.timestamp.desc())
+            users = DBSession.query(User).order_by(User.dor.desc())
         except DBAPIError:
             return Response(conn_err_msg, content_type='text/plain', status_int=500)
         
         return {'elapsed': get_elapsed,
             'user': user,
-            'chirps': chirps,
-            'latest_users': latest_users}
+            'chirps': chirps[:MAX_CHIRPS],
+            'latest_users': users[:MAX_USERS],
+            'users_count': users.count(),
+            'chirps_count': chirps.count(),
+        }
 
 
     @view_config(route_name='mybirdie',
