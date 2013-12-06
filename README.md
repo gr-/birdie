@@ -3,7 +3,7 @@ Birdie
 
 The micro-blogging app for educational purpose.
 
-The current implementation is powered by the *Pyramid* web development framework for Python 3.
+The current implementation is powered by the *Pyramid* web development framework for Python.
 Ingredients of the soup are the *Chameleon* template framework, *SQLAlchemy* ORM, *Twitter-bootstrap* for CSS.
 
 Fragments of the source code comes from a previous [**Birdie** implementation](https://github.com/cguardia/Pyramid-Tutorial/tree/master/src/stage3) of [Carlos de la Guardia](https://github.com/cguardia/). Actually, it essentially remains the original idea and terms (**Birdie** and *chirp*) in the project.
@@ -37,9 +37,12 @@ Install **Birdie** requirements (package dependencies) and the app itself in `de
 	$ initialize_birdie_db development.ini
 	$ venv/bin/pserve development.ini --reload
 
-Check for successfull installation at [http://localhost:6543](http://localhost:6543)
+Check for successful installation at [http://localhost:6543](http://localhost:6543)
 
 ## INSTALL
+
+Birdie was developed with the Python 3.3 interpreter. It is then fully compliant with any Python 3 branch.
+As the cherry on top, some users report that they have successfully experimented Python 2.7+ environments.
 
 
 ### Setting up a virtual environment
@@ -47,7 +50,10 @@ Check for successfull installation at [http://localhost:6543](http://localhost:6
 To set-up a **Birdie** instance, it is warmly recommended to create a python virtual runtime environment first. This sandbox
 isolates python binaries, packages and various settings for **Birdie** and prevent from conflicts with pre-existing settings.
 
-With python3, the-newly-preferred way is the `pyvenv` library and its command-line counterpart:
+For any python <=3.2 box, it requires the `virtualenv` command. The almost out-of-the-box virtualenv is provided [there](https://pypi.python.org/pypi/virtualenv). Once you've deployed a virtualenv this way, you can directly jump to
+the Birdie Install section.
+
+With python3.3+ the-newly-preferred way is the `pyvenv` library and its command-line counterpart:
 
     $ pyvenv venv
     $ source venv/bin/activate
@@ -57,9 +63,9 @@ system-wide python binary (`/usr/bin` for most of the *ix boxes). Actually, you 
 and to put that directory anywhere on your local file system.
 
 Next, it is required to install **setuptools** in this freshly activated environment.
-If required, assign first the `https_proxy` variable to the URL of your own proxy server:
+If required, assign first the `http_proxy` variable (and maybe the `https_proxy` as well) to the URL of your own proxy server:
 
-    $ export https_proxy=http://<url-of-your-proxy-server>:<port>
+    $ export http_proxy=http://<url-of-your-proxy-server>:<port>
 
 Then, download the [ez_setup.py][ez] script and run:
 
@@ -81,7 +87,7 @@ As an alternative, you might install pip from easy_install itself:
     $ easy_install pip
 
 
-From now on, you are done with a fully functionnal python3 runtime environment. It is recommended to check for latest version
+From now on, you are done with a fully functional python3 runtime environment. It is recommended to check for latest version
 of **setuptools** and *pip-install* **pyramid** as well, even if **Birdie** app install process is expected to resolve python package dependencies
 (it is not as reliable as `pip` anyway).
 
@@ -111,7 +117,7 @@ Ultimately, the *waitress* web server is invoked with all the settings in the *w
 
     $ pserve development.ini --reload
 
-The `--reload` option allows to update the source code and immediatly (by refreshing the web page) observe the modifications on the running instance.
+The `--reload` option allows to update the source code and immediately (by refreshing the web page) observe the modifications on the running instance.
 
 #### Production mode
 
@@ -137,6 +143,7 @@ There are (at least) two known issues you may face when running the **Birdie** a
 [ez]:   https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py "ez_setup.py"
 [inst]: https://raw.github.com/pypa/pip/master/contrib/get-pip.py       "get-pip.py"
 [pip]:  http://www.pip-installer.org/en/latest/index.html       "Pip website"
+[virtualenv]:	https://pypi.python.org/pypi/virtualenv	"virtualenv"
 
 
 
