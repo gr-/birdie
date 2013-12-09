@@ -134,7 +134,7 @@ class BirdieViews(object):
         login_url = request.route_url('login')
         join_url = request.route_url('join')
         came_from = request.params.get('came_from')
-        if came_from is None : # first time it enters the login page
+        if not came_from : # first time it enters the login page
             came_from = request.referer
         message = ''
         login = ''
@@ -171,7 +171,7 @@ class BirdieViews(object):
         join_url = request.route_url('join')
         login_url = request.route_url('login')
         came_from = request.params.get('came_from')
-        if came_from is None: # first time it enters the join page
+        if not came_from: # first time it enters the join page
             came_from = request.referer
         
         if 'form.submitted' in request.params:
@@ -207,6 +207,7 @@ class BirdieViews(object):
             dor = datetime.utcnow()
             DBSession.add( User(username, password, fullname, about, dor) )
             headers = remember(request, username)
+            
             if (came_from == join_url or came_from == login_url or came_from == self.app_url):
                 came_from = request.route_url('mybirdie', username=username)  # never use login form itself as came_from
             return HTTPFound(location = came_from,
@@ -248,13 +249,18 @@ class BirdieViews(object):
                  renderer='birdie:templates/fake.pt')
     def follow(self):
         username = self.logged_in
+        came_from=self.request.referer
+        if not came_from:
+            came_from=self.app_url
+        
         user = DBSession.query(User).filter_by(username=username).one()
         friend_username = self.request.matchdict.get('username')
         friend = DBSession.query(User).filter_by(username=friend_username).one()
         
         if (friend != user and friend not in user.friends):
             user.friends.append(friend)
-        return HTTPFound(location = self.request.referer)
+                        
+        return HTTPFound(location=came_from)
 
 
     @view_config(route_name='unfollow',
@@ -262,11 +268,16 @@ class BirdieViews(object):
                  renderer='birdie:templates/fake.pt')
     def unfollow(self):
         username = self.logged_in
+        came_from=self.request.referer
+        if not came_from:
+            came_from=self.app_url
+        
         user = DBSession.query(User).filter_by(username=username).one()
         friend_username = self.request.matchdict.get('username')
         friend = DBSession.query(User).filter_by(username=friend_username).one()
         
         if friend in user.friends:
             user.friends.remove(friend)
-        return HTTPFound(location = self.request.referer)
+            
+        return HTTPFound(location=came_from)
 
