@@ -14,7 +14,7 @@
 
         <textarea class="form-control" name="about" placeholder="About">${about}</textarea>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit" name="form.submitted">Sign out</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="form.submitted">Sign up</button>
       </form>
   </div>
 </div>
