@@ -80,15 +80,21 @@ From now on, you are done with a fully functional python3 runtime environment.
 
 Install procedure is deadly easy. You have to decide for development or (limited) production instance and follow the directions below.
 
+The most tricky part is to know the way to the cofffee machine while dependencies are auto-magically installing!
+
 #### Development mode
 
 Install dependencies in the site-package directory of the sandbox, and basically deploy the package of the app itself in a way that it can still be edited directly from its source checkout:
 
     > python setup.py develop
 
+Take care however of the `cryptacular` library that is a python wrapper to a C library for data encryption. If C development tools are not avalaible on your box, then, you must comment (with ``#'' symbol) the requirement line in the `setup.py` and reload the above command.
+
 Then you have to initialize the database (sqlite backend) creating the required schema for the app model: 
 
 	> initialize_birdie_db development.ini
+
+Of course, if you have previously broken the `cryptacular` dependency, then you must slightly update the source code to remove calls to this library. Basically, it serves the purpose of encrypting passwords into the database. Thus, you have to follow the instructions from the Traceback of the Error to fix this issue: it consists in updating test for authentication in `security.py` and password encryption to the database in `models.py`.
 
 Ultimately, the *waitress* web server is invoked with all the settings in the *wsgi* server configuration section of the `development.ini` file, to serve the web pages of the **Birdie** app:  
 
