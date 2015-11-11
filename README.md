@@ -88,7 +88,7 @@ Install dependencies in the site-package directory of the sandbox, and basically
 
     > python setup.py develop
 
-Take care however of the `cryptacular` library that is a python wrapper to a C library for data encryption. If C development tools are not avalaible on your box, then, you must comment (with ``#'' symbol) the requirement line in the `setup.py` and reload the above command.
+Take care however of the `cryptacular` library that is a python wrapper to a C library for data encryption. If C development tools are not avalaible on your box, then, you must comment (with '#' symbol) the requirement line in the `setup.py` and reload the above command.
 
 Then you have to initialize the database (sqlite backend) creating the required schema for the app model: 
 
