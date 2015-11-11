@@ -18,9 +18,12 @@ Getting Started
 
 First, download the zip file of the birdie project from the [github repos](https://github.com/gr-/birdie).
 
-If required, assign first the `https_proxy` variable to the URL of your own proxy server:
+If required, don't forget to assign the `https_proxy` variable to the URL of your own proxy server:
 
     > export https_proxy=http://<url-of-your-proxy-server>:<port>
+
+
+## INSTALL FOR PEOPLE IN A HURRY
 
 The following two series of commands are a shorthand for the all install procedure (see below). 
 
@@ -39,10 +42,10 @@ Install **Birdie** requirements (package dependencies) and the app itself in `de
 
 Check for successful installation at [http://localhost:6543](http://localhost:6543)
 
-## INSTALL
+## INSTALL FOR THE OTHERS
 
-Birdie was developed with the Python 3.3+ interpreter. It is then fully compliant with any Python 3 branch.
-As the cherry on top, some users report that they have successfully experienced Python 2.7+ environments.
+Birdie was developed with the python 3.3+ interpreter. It is then fully compliant with any python 3 branch.
+As the cherry on top, some users report that they have successfully experienced python 2.7+ environments.
 
 
 ### Setting up a virtual environment
@@ -68,7 +71,7 @@ and to put that directory anywhere on your local file system.
 
 
 Next, the **setuptools** utility suite is required in this freshly activated environment. Depending on your bare metal python version,
-either you already have it in your virtual environment (with virtualenv or pyvenv from python>=3.4), or you must follow the
+either you already have it in your virtual environment (with virtualenv or pyvenv from python>=3.4), or you could follow the
 instructions from the [PyPi repos entry](https://pypi.python.org/pypi/setuptools) (with python<3.4).
 
 From now on, you are done with a fully functional python3 runtime environment. 
