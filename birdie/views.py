@@ -140,11 +140,11 @@ class BirdieViews(object):
         login = ''
         password = ''
         if 'form.submitted' in request.params:
-            login = request.params['login']
-            password = request.params['password']
+            login = request.params.get('login')
+            password = request.params.get('password')
             if check_login(login, password):
                 headers = remember(request, login)
-                if (came_from == login_url or came_from == join_url or came_from == self.app_url):
+                if (came_from == login_url or came_from == join_url or came_from == self.app_url or came_from is None):
                     came_from = request.route_url('mybirdie', username=login)  # never use login form itself as came_from
                 return HTTPFound(location=came_from,
                                  headers=headers)
@@ -172,7 +172,7 @@ class BirdieViews(object):
         login_url = request.route_url('login')
         came_from = request.params.get('came_from')
         if not came_from: # first time it enters the join page
-            came_from = request.referer
+            came_from = request.referrer
         
         if 'form.submitted' in request.params:
         # registration form has been submitted
@@ -208,7 +208,7 @@ class BirdieViews(object):
             DBSession.add( User(username, password, fullname, about, dor) )
             headers = remember(request, username)
             
-            if (came_from == join_url or came_from == login_url or came_from == self.app_url):
+            if (came_from == join_url or came_from == login_url or came_from == self.app_url or came_from is None):
                 came_from = request.route_url('mybirdie', username=username)  # never use login form itself as came_from
             return HTTPFound(location = came_from,
                              headers = headers)
