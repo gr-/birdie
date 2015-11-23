@@ -11,31 +11,31 @@ The install recipe
 
 1. Prepare a python2 virtual env:
 
-    > virtualenv venv
-	> source venv/bin/activate
+        > virtualenv venv
+	    > source venv/bin/activate
 
 2. Set up the app with distribution capabilities and more:
 
-	> python setup.py develop
+	    > python setup.py develop
 
     Don't forget your own `https_proxy` if any. This step basically install the required dependencies.
     If it fails on C compilation error due to `gevent` dependency, then here is
     one of those miraculous command line that fixes it at least on Mac OS 10.9:
 
-    > CFLAGS='-std=c99' pip install gevent==1.0.2
+        > CFLAGS='-std=c99' pip install gevent==1.0.2
 	
 3. Initialize a test database with fake users:
 
-    > initialize_fakedb
+        > initialize_fakedb
 
 4. Run the **locust.io** test suite
 
-    > locust --host=<url-to-the-birdie-website>
+        > locust --host=<url-to-the-birdie-website>
 	
     Alternatively, with multiple processes:
 
-    > locust --master --host=http://example.com
-	> locust --slave --host=http://example.com
+        > locust --master --host=http://example.com
+	    > locust --slave --host=http://example.com
 
     with as many slaves as you like.
 
