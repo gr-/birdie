@@ -135,7 +135,7 @@ class BirdieViews(object):
         join_url = request.route_url('join')
         came_from = request.params.get('came_from')
         if not came_from : # first time it enters the login page
-            came_from = request.referer
+            came_from = request.referrer
         message = ''
         login = ''
         password = ''
@@ -249,7 +249,7 @@ class BirdieViews(object):
                  renderer='birdie:templates/fake.pt')
     def follow(self):
         username = self.logged_in
-        came_from=self.request.referer
+        came_from=self.request.referrer
         if not came_from:
             came_from=self.app_url
         
@@ -268,7 +268,7 @@ class BirdieViews(object):
                  renderer='birdie:templates/fake.pt')
     def unfollow(self):
         username = self.logged_in
-        came_from=self.request.referer
+        came_from=self.request.referrer
         if not came_from:
             came_from=self.app_url
         
