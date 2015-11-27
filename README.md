@@ -25,7 +25,7 @@ If required, don't forget to assign the `https_proxy` variable to the URL of you
 
 ## INSTALL FOR PEOPLE IN A HURRY
 
-The following two series of commands are a shorthand for the all install procedure (see below). 
+The following two series of commands are a shortcut for the all install procedure (see below). 
 
 Create and set up the python virtual environment:
 
