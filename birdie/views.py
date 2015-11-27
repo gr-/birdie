@@ -101,15 +101,19 @@ class BirdieViews(object):
         my_chirps = []
         
         user = DBSession.query(User).filter_by(username=username).one()
-        
+        message, chirp = None, None
         if ('form.submitted' in self.request.params and self.request.params.get('chirp')):
             chirp = self.request.params.get('chirp')
-            author = user
-            timestamp = datetime.utcnow()
-            DBSession.add( Chirp(chirp, author, timestamp) )
+            if len(chirp)>80:
+                message = "Chirp must be less than 80 characters."
+            else:
+                author = user
+                timestamp = datetime.utcnow()
+                DBSession.add( Chirp(chirp, author, timestamp) )
+                chirp = None
                 
-            url = self.request.route_url('mybirdie', username=username)
-            return HTTPFound(url)
+#            url = self.request.route_url('mybirdie', username=username)
+#            return HTTPFound(url)
 
 #        chirps = reduce(lambda x, y: x.extend(y), [f.chirps for f in user.friends if f.chirps], [])
         for f in user.friends:
@@ -122,6 +126,8 @@ class BirdieViews(object):
             my_chirps = sorted(user.chirps, key=attrgetter('timestamp'), reverse=True)
 
         return {'elapsed': get_elapsed,
+                'message' : message,
+                'chirp' : chirp,
                 'user': user,
                 'chirps': chirps[:MAX_CHIRPS],
                 'my_chirps': my_chirps[:MAX_MY_CHIRPS]}
