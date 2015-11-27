@@ -5,15 +5,15 @@
    <div metal:fill-slot="content-bottom" tal:omit-tag="">
       <form class="form-signin" action="${view.app_url}/login" method="POST">
 		  <div tal:condition="message">
-			  <span class="alert alert-danger">${message}</span>
+			  <span class="alert alert-danger" role="alert">${message}</span>
 		  </div>
         <h2 class="form-signin-heading">Log in Birdie</h2>
 	    <input type="hidden" name="came_from" value="${came_from}"/>
         <input type="text" class="form-control" id="login" name="login" value="${login}" placeholder="Username"	required autofocus />
         <input type="password" class="form-control" id="password" name="password" value="${password}" placeholder="Password" required />
 		
-        <button class="btn btn-lg btn-primary btn-block" type="submit" name="form.submitted">Sign in</button>
-  	    <div class="form-signout"> Not a member? <a href="${view.app_url}/join" class="btn btn-primary btn-lg pull-right" role="button">Sign up</a></div>
+        <button class="btn btn-md btn-primary btn-block" type="submit" name="form.submitted">Sign in</button>
+  	    <div class="form-signout"> Not a member? <a href="${view.app_url}/join" class="btn btn-primary btn-md pull-right" role="button">Sign up</a></div>
       </form>
   </div>
 </div>

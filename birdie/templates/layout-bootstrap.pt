@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="gr-">
     <link rel="shortcut icon" href="${request.static_url('birdie:static/favicon.ico')}">
     
 	<title>Birdie</title>
@@ -20,7 +20,7 @@
 
     <!-- Custom styles for this template -->
     <link href="${request.static_url('birdie:static/jumbotron.css')}" rel="stylesheet">
-	
+
 	<more metal:define-slot="head-more" />
   </head>
 
@@ -29,13 +29,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="${view.app_url}/about"><span class="glyphicon glyphicon-map-marker"></span> Birdie</a>
+          <a class="navbar-brand" href="${view.app_url}/about"><span class="glyphicon glyphicon-info-sign"></span> About</a>
         </div>
         <div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
@@ -44,7 +38,7 @@
 				</li>
 				<li>
 					<a tal:condition="view.logged_in is not None"
-						href="${view.app_url}/${view.logged_in}"><span class="glyphicon glyphicon-user"></span> My Birdie</a>
+						href="${view.app_url}/${view.logged_in}"><span class="glyphicon glyphicon-share-alt"></span> My Birdie</a>
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

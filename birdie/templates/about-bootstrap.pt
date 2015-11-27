@@ -1,6 +1,6 @@
 <div metal:use-macro="view.layout">
    	<div metal:fill-slot="content-top" tal:omit-tag="">
-        <h1>About Birdie</h1>
+        <h2>About Birdie</h2>
 		<p class="lead"><em>Python</em>, <em>Pyramid</em> and <em>Twitter Bootstrap</em> are the main ingredients of the soup. This flavor is powered by a standard SQL backend. </p>
 	</div>
 
